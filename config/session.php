@@ -155,6 +155,8 @@ return [
     | domain and all subdomains. Typically, this shouldn't be changed.
     |
     */
+ 
+
 
     'domain' => env('SESSION_DOMAIN'),
 
@@ -184,6 +186,7 @@ return [
 
     'http_only' => env('SESSION_HTTP_ONLY', true),
 
+
     /*
     |--------------------------------------------------------------------------
     | Same-Site Cookies
@@ -199,7 +202,8 @@ return [
     |
     */
 
-    'same_site' => env('SESSION_SAME_SITE', 'lax'),
+    // 'same_site' => env('SESSION_SAME_SITE', 'lax'),
+    'same_site' => 'lax', // or 'strict'
 
     /*
     |--------------------------------------------------------------------------

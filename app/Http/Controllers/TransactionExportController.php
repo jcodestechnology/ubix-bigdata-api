@@ -5,14 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ExportLog;
 use App\Services\RabbitMQPublisher;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 
 class TransactionExportController extends Controller
 {
-    /**
-     * Request an export job (producer)
-     */
+ 
     public function requestExport(Request $request)
     {
         $request->validate([
@@ -21,19 +20,18 @@ class TransactionExportController extends Controller
             'sort_order' => 'in:asc,desc|nullable',
         ]);
 
-        // Create Export Log
+       
         $exportLog = ExportLog::create([
-            'user_id' => 3, // Replace with auth()->id() in production
+            'user_id' => auth()->id(),
             'status'  => 'pending',
             'filters' => $request->filters ?? null,
         ]);
 
-        // ✅ Wrap payload in a consistent format
         $payload = [
             'type' => 'transaction_export',
             'data' => [
                 'export_id'  => $exportLog->id,
-                'user_id'    => 3,
+                'user_id'    => auth()->id(),
                 'filters'    => $request->filters ?? [],
                 'sort_by'    => $request->sort_by ?? 'transaction_date',
                 'sort_order' => $request->sort_order ?? 'desc',
@@ -55,9 +53,6 @@ class TransactionExportController extends Controller
         ]);
     }
 
-    /**
-     * Check export status (API endpoint)
-     */
     public function checkExportStatus($exportId)
     {
         $exportLog = ExportLog::findOrFail($exportId);
@@ -90,9 +85,7 @@ class TransactionExportController extends Controller
         return response()->json($response);
     }
 
-    /**
-     * Download exported file with automatic cleanup
-     */
+
     public function downloadExport($exportId)
     {
         $exportLog = ExportLog::findOrFail($exportId);
@@ -140,7 +133,7 @@ class TransactionExportController extends Controller
      */
     public function listExports(Request $request)
     {
-        $userId = 3; // Replace with auth()->id() in production
+        $userId = auth()->id();
         
         $exports = ExportLog::where('user_id', $userId)
             ->orderBy('created_at', 'desc')
@@ -194,7 +187,7 @@ class TransactionExportController extends Controller
             $export->update([
                 'file_name' => null,
                 'file_size' => null,
-                'status' => 'completed' // Keep as completed, not expired (since expired is not in ENUM)
+                'status' => 'completed' 
             ]);
         }
 

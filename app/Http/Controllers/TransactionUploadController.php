@@ -13,7 +13,7 @@ class TransactionUploadController extends Controller
 public function upload(Request $request)
 {
     $request->validate([
-        'csv_file' => 'required|file|mimes:csv,txt|max:102400',
+        'csv_file' => 'required|file|mimes:csv|max:102400',
     ]);
 
     try {
@@ -60,6 +60,5 @@ public function upload(Request $request)
         ], 500);
     }
 }
-
 
 }

@@ -17,12 +17,12 @@ use Box\Spout\Writer\Common\Creator\Style\StyleBuilder;
 
 class ConsumeTransactionExports extends Command
 {
-    protected $signature = 'rabbitmq:consume-transaction-exports';
+    protected $signature = 'rabbitmq:consume-transaction-export';
     protected $description = 'Consume export jobs from RabbitMQ and generate Excel files';
 
     public function handle()
     {
-        $queue = env('RABBITMQ_EXPORT_QUEUE', 'transaction_exports');
+        $queue = env('RABBITMQ_EXPORT_QUEUE', 'transaction_export');
 
         $connection = new AMQPStreamConnection(
             env('RABBITMQ_HOST', '127.0.0.1'),
