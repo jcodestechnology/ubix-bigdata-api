@@ -16,10 +16,12 @@ Route::post('/login', [LoginController::class, 'login'])
 
 // Protected routes
 Route::middleware(['token.auth'])->group(function () {
+
      Route::post('/register', [RegisterController::class, 'register']);
     Route::post('/logout', [LoginController::class, 'logout']);
+
     Route::get('/user', [LoginController::class, 'user']);
-    Route::post('/refresh', [LoginController::class, 'refresh']);
+   // Route::post('/refresh', [LoginController::class, 'refresh']);
 
     Route::post('/upload-csv', [TransactionUploadController::class, 'upload']);
     
@@ -37,7 +39,7 @@ Route::middleware(['token.auth'])->group(function () {
         Route::get('/statistics', [TransactionDataTableController::class, 'getStatistics']);
     });
 
-        Route::get('/users', [UserController::class, 'index']);
+    Route::get('/users', [UserController::class, 'index']);
     Route::get('/users/{id}', [UserController::class, 'show']);
     Route::put('/users/{id}', [UserController::class, 'update']);
     Route::delete('/users/{id}', [UserController::class, 'destroy']);

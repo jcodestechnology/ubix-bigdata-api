@@ -14,10 +14,7 @@ use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
 {
-    /**
-     * Login and issue a personal access token (Sanctum).
-     * Rate-limited and sets a secure HTTP-only cookie.
-     */
+
 //     public function login(Request $request)
 //     {
 //         $request->merge([
@@ -137,14 +134,11 @@ public function login(Request $request)
         'message' => 'Login successful',
         'user' => $user->only('id', 'name', 'email'),
         'token' => $plainTextToken,
-        'expires_in' => $expiryMinutes * 60, // in seconds
+        'expires_in' => $expiryMinutes * 60, 
     ]);
 }
 
 
-    /**
-     * Logout by revoking the current token (from Authorization header or cookie).
-     */
     public function logout(Request $request)
     {
         $token = $request->bearerToken() ?? $request->cookie('auth_token');
@@ -167,10 +161,7 @@ public function login(Request $request)
         return response()->json(['message' => 'Logout successful'])->withCookie($expiredCookie);
     }
 
-    /**
-     * Return currently authenticated user.
-     * Requires the authentication middleware (below) to set the user.
-     */
+
     public function user(Request $request)
     {
         $user = $request->user();
